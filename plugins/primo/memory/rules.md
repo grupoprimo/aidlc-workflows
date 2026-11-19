@@ -12,4 +12,4 @@
 
 ## Grupo Primo — skills transformadoras dentro do workflow
 - Quando uma etapa pede `primo-ambientes`, `primo-iac-terraform`, `primo-auth`, `primo-ci-pipeline` ou `primo-catalog-info`, o diagnóstico e o plano da skill entram nos artefatos da etapa, não em `docs/adopt/`. A skill não pausa: a aprovação da etapa é a aprovação do plano.
-- A aplicação do plano (Fase 2 da skill) entra como itens do plano da `code-generation`.
+- A aplicação do plano (Fase 2 da skill) entra como itens do plano da `code-generation`. Na etapa `ci-pipeline`, que vem depois, o plano entra como pergunta de aprovação da própria etapa e é aplicado quando ela gera os artefatos.

@@ -11,6 +11,7 @@ fragments:
 ## fragment: before-step:2
 ### Step 1a (primo): Esteira padrão
 A esteira é a padrão do grupo: use a skill `primo-ci-pipeline` (workflows
-caller dos reusables de `grupoprimo/platform-shared-workflows`), com o plano
-nos artefatos desta etapa. Componente novo também precisa do
-`catalog-info.yaml` pela skill `primo-catalog-info`.
+caller dos reusables de `grupoprimo/platform-shared-workflows`). O plano da
+skill entra como pergunta de aprovação no Step 2 e os workflows são escritos no
+Step 4, depois da resposta. Componente novo também precisa do
+`catalog-info.yaml` pela skill `primo-catalog-info`, do mesmo jeito.
