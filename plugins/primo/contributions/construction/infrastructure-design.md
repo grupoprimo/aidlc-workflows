@@ -10,7 +10,6 @@ fragments:
 ---
 ## fragment: in:Constraints
 - **(primo)** Infraestrutura usa só módulos de `grupoprimo/terraform-modules`.
-  Use `primo-ambientes` e depois `primo-iac-terraform` em modo AI-DLC: o
-  diagnóstico, o plano e o custo mensal entram nos artefatos desta etapa, a
-  skill não pausa e a aprovação desta etapa é a aprovação do plano. O apply
-  fica para a `code-generation`.
+  Defina ambientes e naming com a skill `primo-ambientes` e depois a infra com
+  `primo-iac-terraform`: o diagnóstico, o plano e o custo mensal entram nos
+  artefatos desta etapa. O `.tf` fica para a `code-generation`.

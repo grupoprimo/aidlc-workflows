@@ -1,6 +1,6 @@
 {
   "name": "primo",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "Grupo Primo: escopos do grupo, Aether no fluxo e ligação das etapas às skills do AI Platform Kit.",
   "author": {
     "name": "Grupo Primo — Plataforma"
@@ -9,10 +9,13 @@
     "core"
   ],
   "aidlc": {
-    "rulesLevel": "team",
+    "rulesLevel": "org",
     "contributes": {
       "overlays": "contributions/",
-      "scopes": "scopes/"
+      "scopes": "scopes/",
+      "sensors": "sensors/",
+      "tools": "tools/",
+      "memory": "memory/"
     }
   }
 }
