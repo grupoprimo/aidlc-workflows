@@ -441,7 +441,10 @@ function humanReport(
   projectDir: string,
   verbose: boolean,
 ): string {
-  const harness = discoverProjectHarnesses(projectDir)[0];
+  // The heading names the tree this doctor ran from, so a project with .claude
+  // and .kiro run from Kiro says Kiro; the first one installed is the fallback.
+  const harnesses = discoverProjectHarnesses(projectDir);
+  const harness = harnesses.find((candidate) => candidate.harnessDir === harnessDir()) ?? harnesses[0];
   const frameworkPattern =
     /^(?:Agent filename|Scope filename|Cycle detection|Orphan stage|Uncompiled stage|Enabled stage compile coverage|Scope validation|Schema validation|Graph references|Keyword overlap|Rule drift|Paired sensor coverage|Stage graph|Scope grid|Sensor |Required sections|Upstream coverage|Traceability|Linter|Type check)/i;
   const machinePattern =

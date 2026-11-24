@@ -808,7 +808,12 @@ function runtimeRequirements(files: readonly string[]): {
       continue;
     }
     bun ||= /\bbun\s+[^\n]*(?:aidlc|\.ts)/.test(text);
-    aidlc ||= /\baidlc\s+engine\b/.test(text);
+    // A command that falls back to the Bun launcher when aidlc is absent (the
+    // Kiro IDE plugin hook, composeCommand in aidlc-plugin-emit.ts) runs
+    // without the aidlc command, so only a command with no such fallback needs it.
+    for (const command of text.matchAll(/\baidlc\s+engine\b[^"\n]*/g)) {
+      if (!/\|\|\s*bun\s/.test(command[0])) aidlc = true;
+    }
   }
   return { bun, aidlc };
 }

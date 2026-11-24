@@ -393,6 +393,48 @@ describe("t294 runtime diagnostics", () => {
     );
   });
 
+  // The Kiro IDE plugin hook runs `aidlc engine plugin sync … || bun …`, so it
+  // works with Bun alone: the doctor warned that aidlc was missing and told the
+  // person to fix a PATH that was already right.
+  test("a hook that falls back to bun needs bun, not the aidlc command", () => {
+    const project = temp("aidlc-t294-runtime-fallback-");
+    const hooks = join(project, ".kiro", "hooks");
+    mkdirSync(hooks, { recursive: true });
+    writeFileSync(
+      join(hooks, "aidlc-primo-compose.json"),
+      JSON.stringify({
+        version: "v1",
+        hooks: [{
+          name: "aidlc-primo-compose",
+          trigger: "SessionStart",
+          action: {
+            type: "command",
+            command: "aidlc engine plugin sync --harness-dir .kiro --plugin-root ./.kiro/aidlc-plugins/x || bun ./.kiro/aidlc-plugins/x/hooks/aidlc-plugin-compose.ts .kiro kiro-ide",
+          },
+        }],
+      }),
+    );
+    const options = {
+      baselinePath: join(project, "empty"),
+      interactivePath: join(project, "also-empty"),
+      which: () => null,
+      run: () => ({ status: 0, stdout: "2.0.0\n" }),
+      includeHarnessCli: false,
+    };
+    const fallback = probeRuntime(project, ".kiro", "kiro-ide", options);
+    expect(fallback.binaries.find((item) => item.name === "aidlc")?.status).toBe("not-required");
+    expect(fallback.binaries.find((item) => item.name === "bun")?.required).toBe(true);
+    // A second hook with no fallback still needs the aidlc command.
+    writeFileSync(
+      join(hooks, "aidlc-guard.json"),
+      JSON.stringify({
+        version: "v1",
+        hooks: [{ name: "g", trigger: "PreToolUse", action: { type: "command", command: "aidlc engine hook guard-tool-call" } }],
+      }),
+    );
+    const plain = probeRuntime(project, ".kiro", "kiro-ide", options);
+    expect(plain.binaries.find((item) => item.name === "aidlc")?.status).toBe("missing");
+  });
   // The doctor row reported bun "interactive-only" while the project's hooks
   // were running through it, and an agent took that as the person's PATH being
   // broken. Hooks that fire settle it; without them the row says what it saw.
